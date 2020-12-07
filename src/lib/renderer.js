@@ -20,7 +20,7 @@ module.exports = class Renderer {
     fs.emptyDirSync(this.outputDir);
   }
 
-  async renderRootTypes(name, type) {
+  async renderRootTypes(name, type, showHidden) {
     let pages = [];
     if (type) {
       const slug = toSlug(name);
@@ -35,9 +35,17 @@ module.exports = class Renderer {
       fs.ensureDir(dirPath);
 
       await Promise.all(
-        Object.keys(type).map((name) =>
-          this.renderTypeEntities(dirPath, name, type[name]),
-        ),
+        Object.keys(type)
+          .filter(function (name) {
+            return (
+              showHidden ||
+              !type[name].description ||
+              type[name].description.indexOf("@hideFromDocumentation") === -1
+            );
+          })
+          .map((name) =>
+            this.renderTypeEntities(dirPath, name, type[name], showHidden),
+          ),
       ).then((p) => {
         pages = [...p];
       });
@@ -45,11 +53,11 @@ module.exports = class Renderer {
     return pages;
   }
 
-  async renderTypeEntities(dirPath, name, type) {
+  async renderTypeEntities(dirPath, name, type, showHidden) {
     if (type) {
       const fileName = toSlug(name);
       const filePath = path.join(dirPath, `${fileName}.md`);
-      const content = this.p.printType(fileName, type);
+      const content = this.p.printType(fileName, type, showHidden);
       await fs.outputFile(filePath, content, "utf8");
       const page = path
         .relative(this.outputDir, filePath)

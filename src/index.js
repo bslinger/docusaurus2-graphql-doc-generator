@@ -50,6 +50,10 @@ module.exports = function pluginGraphQLDocGenerator(context, opts) {
           "Set temp dir for schema diff",
           config.tmpDir,
         )
+        .option(
+          "-s, --showHidden",
+          "Show anything that is hidden by @hideFromDocumentation",
+        )
         .description("Generate GraphQL Schema Documentation")
         .action(async (options) => {
           const baseURL = options.base;
@@ -59,6 +63,7 @@ module.exports = function pluginGraphQLDocGenerator(context, opts) {
           const homepage = options.homepage;
           const diffMethod = options.force ? "FORCE" : options.diff;
           const tmpDir = options.tmp;
+          const showHidden = options.showHidden;
           await generateDocFromSchema(
             baseURL,
             schema,
@@ -67,6 +72,7 @@ module.exports = function pluginGraphQLDocGenerator(context, opts) {
             homepage,
             diffMethod,
             tmpDir,
+            showHidden
           );
         });
     },

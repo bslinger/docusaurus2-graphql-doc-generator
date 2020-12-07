@@ -157,7 +157,7 @@ module.exports = class Printer {
     return code;
   }
 
-  printCodeType(type) {
+  printCodeType(type, showHidden) {
     let code = `${isInterfaceType(type) ? "interface" : "type"} ${getTypeName(
       type,
     )}`;
@@ -170,7 +170,7 @@ module.exports = class Printer {
         : ""
     }`;
     code += ` {\n`;
-    code += getFields(type)
+    code += getFields(type, showHidden)
       .map((v) => `  ${this.printCodeField(v)}`)
       .join("");
     code += `}`;
@@ -189,7 +189,7 @@ module.exports = class Printer {
     );
   }
 
-  printCode(type) {
+  printCode(type, showHidden) {
     let code = "\n```graphql\n";
     switch (true) {
       case isEnumType(type):
@@ -201,7 +201,7 @@ module.exports = class Printer {
       case isInterfaceType(type):
       case isObjectType(type):
       case isInputType(type):
-        code += this.printCodeType(type);
+        code += this.printCodeType(type, showHidden);
         break;
       case isScalarType(type):
         code += this.printCodeScalar(type);
@@ -219,14 +219,14 @@ module.exports = class Printer {
     return code;
   }
 
-  printType(name, type) {
+  printType(name, type, showHidden) {
     if (!type) {
       return "";
     }
 
     const header = this.printHeader(name, getTypeName(type));
     const description = this.printDescription(type);
-    const code = this.printCode(type);
+    const code = this.printCode(type, showHidden);
 
     let metadata = "";
     if (isEnumType(type)) {
@@ -238,7 +238,7 @@ module.exports = class Printer {
     }
 
     if (isObjectType(type) || isInterfaceType(type) || isInputType(type)) {
-      metadata = this.printSection(getFields(type), "Fields");
+      metadata = this.printSection(getFields(type, showHidden), "Fields");
       if (hasMethod(type, "getInterfaces")) {
         metadata += this.printSection(type.getInterfaces(), "Interfaces");
       }

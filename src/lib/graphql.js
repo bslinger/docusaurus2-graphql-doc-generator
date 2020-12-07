@@ -63,12 +63,19 @@ function getIntrospectionFieldsList(queryType) {
   return queryType.getFields();
 }
 
-function getFields(type) {
+function getFields(type, showHidden) {
   if (!hasMethod(type, "getFields")) {
     return [];
   }
   const fieldMap = type.getFields();
-  return Object.keys(fieldMap).map((name) => fieldMap[name]);
+  return Object.keys(fieldMap)
+    .filter(
+      (name) =>
+        showHidden ||
+        !fieldMap[name].description ||
+        fieldMap[name].description.indexOf("@hideFromDocumentation") === -1,
+    )
+    .map((name) => fieldMap[name]);
 }
 
 function getTypeName(type, defaultName = "") {
