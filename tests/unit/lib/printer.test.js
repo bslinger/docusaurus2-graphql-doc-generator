@@ -395,7 +395,12 @@ describe("lib", () => {
                 .mockReturnValueOnce(entityName);
             }
             const code = printerInstance.printCode(entityName);
-            expect(printCode).toHaveBeenCalledWith(entityName);
+            if (["interface", "object", "input"].includes(type)) {
+              expect(printCode).toHaveBeenCalledWith(entityName, undefined);
+            } else {
+              expect(printCode).toHaveBeenCalledWith(entityName);
+            }
+
             expect(code).toMatchSnapshot();
           },
         );

@@ -72,7 +72,7 @@ module.exports = function pluginGraphQLDocGenerator(context, opts) {
             homepage,
             diffMethod,
             tmpDir,
-            showHidden
+            showHidden,
           );
         });
     },
