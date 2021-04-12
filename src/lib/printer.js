@@ -89,11 +89,21 @@ module.exports = class Printer {
       return "";
     }
 
+    let deprecatedDescription = "";
+    if (type.isDeprecated) {
+      if (type.deprecationReason) {
+        deprecatedDescription =
+          "_(Deprecated: " + type.deprecationReason + ")_\n\n";
+      } else {
+        deprecatedDescription = "_(Deprecated)_\n\n";
+      }
+    }
+
     let section = `${level} ${this.toLink(type, getTypeName(type))} ${
       hasProperty(type, "type")
         ? `(${this.toLink(type.type, getTypeName(type.type))})`
         : ""
-    }\n\n${type.description || ""}\n`;
+    }\n\n${deprecatedDescription}${type.description || ""}\n`;
     if (isParametrizedField(type)) {
       section += this.printSectionItems(type.args, HEADER_SECTION_ITEM_LEVEL);
     }

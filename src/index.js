@@ -51,7 +51,7 @@ module.exports = function pluginGraphQLDocGenerator(context, opts) {
           config.tmpDir,
         )
         .option(
-          "-s, --showHidden",
+          "-S, --showHidden",
           "Show anything that is hidden by @hideFromDocumentation",
         )
         .description("Generate GraphQL Schema Documentation")

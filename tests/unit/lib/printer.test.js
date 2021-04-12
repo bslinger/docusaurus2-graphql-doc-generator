@@ -172,6 +172,35 @@ describe("lib", () => {
           expect(printSectionItems).toHaveBeenCalledWith(type.args, "- #####");
           expect(section).toMatchSnapshot();
         });
+
+        test("returns Deprecated section without reason", () => {
+          const type = {
+            name: "EntityTypeName",
+            description: "Lorem ipsum",
+            isDeprecated: true,
+          };
+          jest.spyOn(graphql, "getTypeName").mockReturnValue(type.name);
+          jest.spyOn(graphql, "getNamedType").mockReturnValue(type.name);
+          jest.spyOn(graphql, "isObjectType").mockReturnValueOnce(true);
+
+          const section = printerInstance.printSectionItem(type);
+          expect(section).toMatchSnapshot();
+        });
+
+        test("returns Deprecated section with reason", () => {
+          const type = {
+            name: "EntityTypeName",
+            description: "Lorem ipsum",
+            isDeprecated: true,
+            deprecationReason: "Here is the reason",
+          };
+          jest.spyOn(graphql, "getTypeName").mockReturnValue(type.name);
+          jest.spyOn(graphql, "getNamedType").mockReturnValue(type.name);
+          jest.spyOn(graphql, "isObjectType").mockReturnValueOnce(true);
+
+          const section = printerInstance.printSectionItem(type);
+          expect(section).toMatchSnapshot();
+        });
       });
 
       describe("printCodeEnum()", () => {

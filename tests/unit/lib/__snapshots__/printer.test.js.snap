@@ -152,6 +152,24 @@ section content
 "
 `;
 
+exports[`lib printer class Printer printSectionItem() returns Deprecated section with reason 1`] = `
+"#### [\`EntityTypeName\`](docs/graphql/objects/entity-type-name) 
+
+_(Deprecated: Here is the reason)_
+
+Lorem ipsum
+"
+`;
+
+exports[`lib printer class Printer printSectionItem() returns Deprecated section without reason 1`] = `
+"#### [\`EntityTypeName\`](docs/graphql/objects/entity-type-name) 
+
+_(Deprecated)_
+
+Lorem ipsum
+"
+`;
+
 exports[`lib printer class Printer printSectionItem() returns Markdown #### link section with description 1`] = `
 "#### [\`EntityTypeName\`](docs/graphql/objects/entity-type-name) 
 
